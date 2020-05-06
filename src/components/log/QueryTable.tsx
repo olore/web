@@ -1,21 +1,5 @@
 import React from 'react';
-import { useTable, usePagination, HeaderGroup, UsePaginationOptions, UseSortByOptions, useRowState, Row, UseTableColumnOptions } from 'react-table';
-
-// export interface TableInstance<D extends object = {}>
-//     extends UseFiltersInstanceProps<D>,
-//       UseTableHeaderGroupProps<D>,
-//       UseTableInstanceProps<D>,
-//       UseFiltersInstanceProps<D>,
-//       UsePaginationInstanceProps<D> {}
-
-export interface TableOptions<D extends object>
-  extends UsePaginationOptions<D>,
-    UseTableColumnOptions<D>,
-    UseSortByOptions<D> {};
-
-// export interface TableState<D extends object = {}> {
-//     hiddenColumns?: Array<IdType<D>>;
-// }
+import { useTable, usePagination, useRowState } from 'react-table';
 
 export default function QueryTable({ columns, data}: any) {
 
@@ -34,21 +18,6 @@ export default function QueryTable({ columns, data}: any) {
     previousPage,
     setPageSize,
     state: { pageIndex, pageSize },
-  } : {
-    getTableProps: any,
-    getTableBodyProps: any,
-    headerGroups: Array<HeaderGroup>,
-    prepareRow: any,
-    page: Array<Row>,
-    canPreviousPage: any,
-    canNextPage: any,
-    pageOptions: any,
-    pageCount: any,
-    gotoPage: any,
-    nextPage: any,
-    previousPage: any,
-    setPageSize: any,
-    state: any
   } = useTable({
       columns,
       data,
