@@ -8,11 +8,9 @@
  * This file is copyright under the latest version of the EUPL.
  * Please see LICENSE file for your rights under this license. */
 
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import i18n, { TFunction } from "i18next";
 import { WithTranslation, withTranslation } from "react-i18next";
-import debounce from "lodash.debounce";
-import isEqual from "lodash.isequal";
 import moment from "moment";
 import { padNumber } from "../../util/graphUtils";
 import api from "../../util/api";
