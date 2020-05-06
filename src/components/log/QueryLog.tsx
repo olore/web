@@ -91,28 +91,6 @@ class QueryLog extends Component<WithTranslation, QueryLogState> {
   }
 
   /**
-   * Get the props for a given row
-   *
-   * @param state the state of the ReactTable
-   * @param rowInfo the row information
-   * @returns {*} props for the row
-   */
-  // getRowProps = (state: any, rowInfo: RowInfo | undefined) => {
-  //   // Check if the row is known to be blocked or allowed (not unknown)
-  //   if (rowInfo && rowInfo.row.status !== 0) {
-  //     // Blocked queries are red, allowed queries are green
-  //     return {
-  //       style: {
-  //         color: [1, 4, 5, 6].includes(rowInfo.row.status) ? "red" : "green"
-  //       }
-  //     };
-  //   } else {
-  //     // Unknown queries do not get colored
-  //     return {};
-  //   }
-  // };
-
-  /**
    * Convert the table filters into API history filters
    *
    * @param tableFilters the filters requested by the table
@@ -225,11 +203,9 @@ class QueryLog extends Component<WithTranslation, QueryLogState> {
       })
     );
 
-    console.log(123, "here");
     this.updateHandler.promise
       .then(data => {
         // Update the log with the new queries
-        console.log(111, data);
         this.setState(prevState => ({
           loading: false,
           atEnd: data.cursor === null,
@@ -373,37 +349,50 @@ const queryTypes = ["A", "AAAA", "ANY", "SRV", "SOA", "PTR", "TXT"];
  * @returns {function({filter: *, onChange: *}): *} A select component with the
  * filter data
  */
-// const selectionFilter = (
-//   items: string[],
-//   t: TFunction,
-//   extras: Array<{ name: string; value: any }> = []
-// ) => {
-//   return ({
-//     filter,
-//     onChange
-//   }: {
-//     filter: Filter;
-//     onChange: ReactTableFunction;
-//   }) => (
-//     <select
-//       onChange={event => onChange(event.target.value)}
-//       style={{ width: "100%" }}
-//       value={filter ? filter.value : "all"}
-//     >
-//       <option value="all">{t("All")}</option>
-//       {extras.map((extra, i) => (
-//         <option key={i} value={extra.value}>
-//           {extra.name}
-//         </option>
-//       ))}
-//       {items.map((item, i) => (
-//         <option key={i + extras.length} value={i}>
-//           {item}
-//         </option>
-//       ))}
-//     </select>
-//   );
-// };
+const selectionFilter = (
+  items: string[],
+  t: TFunction,
+  extras: Array<{ name: string; value: any }> = []
+) => {
+  return ({
+    filter,
+    onChange
+  }: {
+    filter: any;
+    onChange: any;
+  }) => (
+    <select
+      onChange={event => onChange(event.target.value)}
+      style={{ width: "100%" }}
+      value={filter ? filter.value : "all"}
+    >
+      <option value="all">{t("All")}</option>
+      {extras.map((extra, i) => (
+        <option key={i} value={extra.value}>
+          {extra.name}
+        </option>
+      ))}
+      {items.map((item, i) => (
+        <option key={i + extras.length} value={i}>
+          {item}
+        </option>
+      ))}
+    </select>
+  );
+};
+
+  const getCellTextColor = (row: any) => {
+    // Check if the row is known to be blocked or allowed (not unknown)
+    if (row.status !== 0) {
+      // Blocked queries are red, allowed queries are green
+      console.log(row.row.values.status, row);
+      return [1, 4, 5, 6].includes(row.row.values.status) ? "red" : "green"
+    } else {
+      // Unknown queries do not get colored
+      return "";
+    }
+  };
+
 
 /**
  * The columns of the Query Log. Some pieces are translated, so you must pass in
@@ -415,45 +404,45 @@ const columns = (t: TFunction) => [
     id: "time",
     accessor: (r: ApiQuery) => r.timestamp,
     width: 70,
-    // Cell: (row: RowRenderProps) => {
-    //   const date = new Date(row.value * 1000);
-    //   const month = date.toLocaleDateString(i18n.language, {
-    //     month: "short"
-    //   });
-    //   const dayOfMonth = padNumber(date.getDate());
-    //   const hour = padNumber(date.getHours());
-    //   const minute = padNumber(date.getMinutes());
-    //   const second = padNumber(date.getSeconds());
+    Cell: (row: any) => {
+      const date = new Date(row.value * 1000);
+      const month = date.toLocaleDateString(i18n.language, {
+        month: "short"
+      });
+      const dayOfMonth = padNumber(date.getDate());
+      const hour = padNumber(date.getHours());
+      const minute = padNumber(date.getMinutes());
+      const second = padNumber(date.getSeconds());
 
-    //   return (
-    //     <Fragment>
-    //       {month + ", " + dayOfMonth}
-    //       <br />
-    //       {hour + ":" + minute + ":" + second}
-    //     </Fragment>
-    //   );
-    // },
+      return (
+        <div style={{ color: getCellTextColor(row) }}>
+          {month + ", " + dayOfMonth}
+          <br />
+          {hour + ":" + minute + ":" + second}
+        </div>
+      );
+    },
     filterable: true,
     filterMethod: () => true, // Don't filter client side
-    // Filter: ({
-    //   filter,
-    //   onChange
-    // }: {
-    //   filter: Filter;
-    //   onChange: ReactTableFunction;
-    // }) => (
-    //   <TranslatedTimeRangeSelector
-    //     range={filter ? filter.value : null}
-    //     onSelect={range => {
-    //       if (range) {
-    //         onChange(range);
-    //       } else {
-    //         onChange(getDefaultRange(t));
-    //       }
-    //     }}
-    //     showLabel={false}
-    //   />
-    // )
+    Filter: ({
+      filter,
+      onChange
+    }: {
+      filter: any;
+      onChange: any;
+    }) => (
+      <TranslatedTimeRangeSelector
+        range={filter ? filter.value : null}
+        onSelect={range => {
+          if (range) {
+            onChange(range);
+          } else {
+            onChange(getDefaultRange(t));
+          }
+        }}
+        showLabel={false}
+      />
+    )
   },
   {
     Header: t("Type"),
@@ -462,7 +451,14 @@ const columns = (t: TFunction) => [
     width: 50,
     filterable: true,
     filterMethod: () => true, // Don't filter client side
-    // Filter: selectionFilter(queryTypes, t)
+    Filter: selectionFilter(queryTypes, t),
+    Cell: (row: any) => {
+      return (
+        <div style={{ color: getCellTextColor(row) }}>
+          {row.value}
+        </div>
+      );
+    }
   },
   {
     Header: t("Domain"),
@@ -471,7 +467,14 @@ const columns = (t: TFunction) => [
     minWidth: 150,
     className: "horizontal-scroll",
     filterable: true,
-    filterMethod: () => true // Don't filter client side
+    filterMethod: () => true, // Don't filter client side
+    Cell: (row: any) => {
+      return (
+        <div style={{ color: getCellTextColor(row) }}>
+          {row.value}
+        </div>
+      );
+    }
   },
   {
     Header: t("Client"),
@@ -480,50 +483,63 @@ const columns = (t: TFunction) => [
     minWidth: 120,
     className: "horizontal-scroll",
     filterable: true,
-    filterMethod: () => true // Don't filter client side
+    filterMethod: () => true,// Don't filter client side
+    Cell: (row: any) => {
+      return (
+        <div style={{ color: getCellTextColor(row) }}>
+          {row.value}
+        </div>
+      );
+    }
   },
   {
     Header: t("Status"),
     id: "status",
     accessor: (r: ApiQuery) => r.status,
     width: 140,
-    // Cell: (row: RowRenderProps) => status(t)[row.value],
     filterable: true,
     filterMethod: () => true, // Don't filter client side
-    // Filter: selectionFilter(status(t), t, [
-    //   { name: t("Allowed"), value: "allowed" },
-    //   { name: t("Blocked"), value: "blocked" }
-    // ])
+    Filter: selectionFilter(status(t), t, [
+      { name: t("Allowed"), value: "allowed" },
+      { name: t("Blocked"), value: "blocked" }
+    ]),
+    Cell: (row: any) => {
+      return (
+        <div style={{ color: getCellTextColor(row) }}>
+          {status(t)[row.value]}
+        </div>
+      );
+    }
   },
   {
     Header: "DNSSEC",
     id: "dnssec",
     accessor: (r: ApiQuery) => r.dnssec,
     width: 90,
-    // Cell: (row: RowRenderProps) => (
-    //   <div style={{ color: dnssecColor[row.value] }}>
-    //     {dnssec(t)[row.value]}
-    //   </div>
-    // ),
+    Cell: (row: any) => (
+      <div style={{ color: dnssecColor[row.value] }}>
+        {dnssec(t)[row.value]}
+      </div>
+    ),
     filterable: true,
     filterMethod: () => true, // Don't filter client side
-    // Filter: selectionFilter(dnssec(t), t)
+    Filter: selectionFilter(dnssec(t), t)
   },
   {
     Header: t("Reply"),
     id: "reply",
-    // accessor: (r: ApiQuery) => ({ type: r.reply, time: r.response_time }),
+    accessor: (r: ApiQuery) => ({ type: r.reply, time: r.response_time }),
     width: 90,
-    // Cell: (row: RowRenderProps) => (
-    //   <div style={{ color: "black" }}>
-    //     {replyTypes(t)[row.value.type]}
-    //     <br />
-    //     {"(" + (row.value.time / 10).toLocaleString() + "ms)"}
-    //   </div>
-    // ),
+    Cell: (row: any) => (
+      <div style={{ color: "black" }}>
+        {replyTypes(t)[row.value.type]}
+        <br />
+        {"(" + (row.value.time / 10).toLocaleString() + "ms)"}
+      </div>
+    ),
     filterable: true,
     filterMethod: () => true, // Don't filter client side
-    // Filter: selectionFilter(replyTypes(t), t)
+    Filter: selectionFilter(replyTypes(t), t)
   },
   {
     Header: t("Action"),
