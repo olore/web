@@ -2,6 +2,33 @@ import React from "react";
 import { useTable, usePagination, useRowState } from "react-table";
 
 export default function QueryTable({ columns, data }: any) {
+  const border = { border: "1px solid rgba(0,0,0,.02)" };
+
+  const getHeaderProps = (props: any, { column }: any) => {
+    return [
+      props,
+      {
+        style: {
+          width: `${column.width}px`,
+          textAlign: "center",
+          ...border
+        }
+      }
+    ];
+  };
+
+  const getCellProps = (props: any, { cell }: any) => {
+    return [
+      props,
+      {
+        style: {
+          padding: "7px 5px",
+          ...border
+        }
+      }
+    ];
+  };
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -21,10 +48,14 @@ export default function QueryTable({ columns, data }: any) {
     {
       columns,
       data,
-      initialState: { pageIndex: 0, pageSize: 25 }
+      initialState: { pageIndex: 0, pageSize: 10 }
     },
     usePagination,
-    useRowState
+    useRowState,
+    hooks => {
+      hooks.getHeaderProps.push(getHeaderProps);
+      hooks.getCellProps.push(getCellProps);
+    }
   );
 
   return (
@@ -75,19 +106,14 @@ export default function QueryTable({ columns, data }: any) {
       </div>
       <table
         {...getTableProps()}
-        className="table table-striped"
-        style={{ backgroundColor: "white" }}
+        className="table table-striped bg-white mb-4"
+        style={{ lineHeight: 1, backgroundColor: "white" }}
       >
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th
-                  {...column.getHeaderProps()}
-                  style={{ width: column.width }}
-                >
-                  {column.render("Header")}
-                </th>
+                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
               ))}
             </tr>
           ))}
@@ -99,12 +125,7 @@ export default function QueryTable({ columns, data }: any) {
               <tr {...row.getRowProps()}>
                 {row.cells.map(cell => {
                   return (
-                    <td
-                      {...cell.getCellProps()}
-                      style={{ lineHeight: 1, padding: "7px 5px" }}
-                    >
-                      {cell.render("Cell")}
-                    </td>
+                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
                   );
                 })}
               </tr>

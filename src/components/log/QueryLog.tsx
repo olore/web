@@ -220,8 +220,6 @@ class QueryLog extends Component<WithTranslation, QueryLogState> {
     return (
       <QueryTable data={this.state.history} columns={columns(t)} />
       /*
-        className="-striped bg-white mb-4"
-        style={{ lineHeight: 1 }}
         showPaginationTop={true}
         sortable={false}
         filterable={false}
