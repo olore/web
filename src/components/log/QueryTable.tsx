@@ -1,8 +1,7 @@
-import React from 'react';
-import { useTable, usePagination, useRowState } from 'react-table';
+import React from "react";
+import { useTable, usePagination, useRowState } from "react-table";
 
-export default function QueryTable({ columns, data}: any) {
-
+export default function QueryTable({ columns, data }: any) {
   const {
     getTableProps,
     getTableBodyProps,
@@ -17,53 +16,54 @@ export default function QueryTable({ columns, data}: any) {
     nextPage,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize },
-  } = useTable({
+    state: { pageIndex, pageSize }
+  } = useTable(
+    {
       columns,
       data,
-      initialState: { pageIndex: 0, pageSize: 25 },
-    }, 
+      initialState: { pageIndex: 0, pageSize: 25 }
+    },
     usePagination,
-    useRowState,
-  )
+    useRowState
+  );
 
   return (
     <>
-    <div className="pagination">
+      <div className="pagination">
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-          {'<<'}
-        </button>{' '}
+          {"<<"}
+        </button>{" "}
         <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {'<'}
-        </button>{' '}
+          {"<"}
+        </button>{" "}
         <button onClick={() => nextPage()} disabled={!canNextPage}>
-          {'>'}
-        </button>{' '}
+          {">"}
+        </button>{" "}
         <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {'>>'}
-        </button>{' '}
+          {">>"}
+        </button>{" "}
         <span>
-          Page{' '}
+          Page{" "}
           <strong>
             {pageIndex + 1} of {pageOptions.length}
-          </strong>{' '}
+          </strong>{" "}
         </span>
         <span>
-          | Go to page:{' '}
+          | Go to page:{" "}
           <input
             type="number"
             defaultValue={pageIndex + 1}
             onChange={e => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0
-              gotoPage(page)
+              const page = e.target.value ? Number(e.target.value) - 1 : 0;
+              gotoPage(page);
             }}
-            style={{ width: '100px' }}
+            style={{ width: "100px" }}
           />
-        </span>{' '}
+        </span>{" "}
         <select
           value={pageSize}
           onChange={e => {
-            setPageSize(Number(e.target.value))
+            setPageSize(Number(e.target.value));
           }}
         >
           {[10, 20, 30, 40, 50].map(pageSize => (
@@ -73,29 +73,45 @@ export default function QueryTable({ columns, data}: any) {
           ))}
         </select>
       </div>
-    <table {...getTableProps()} className="table table-striped" style={{ backgroundColor: "white"}}>
-      <thead>
-        {headerGroups.map(headerGroup => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps()} style={{ width: column.width}}>{column.render('Header')}</th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {page.map(row => {
-          prepareRow(row)
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map(cell => {
-                return <td {...cell.getCellProps()} style={{lineHeight: 1, padding: '7px 5px'}}>{cell.render('Cell')}</td>
-              })}
+      <table
+        {...getTableProps()}
+        className="table table-striped"
+        style={{ backgroundColor: "white" }}
+      >
+        <thead>
+          {headerGroups.map(headerGroup => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <th
+                  {...column.getHeaderProps()}
+                  style={{ width: column.width }}
+                >
+                  {column.render("Header")}
+                </th>
+              ))}
             </tr>
-          )
-        })}
-      </tbody>
-    </table>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {page.map(row => {
+            prepareRow(row);
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => {
+                  return (
+                    <td
+                      {...cell.getCellProps()}
+                      style={{ lineHeight: 1, padding: "7px 5px" }}
+                    >
+                      {cell.render("Cell")}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </>
-  )
+  );
 }

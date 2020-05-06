@@ -25,7 +25,7 @@ import {
   ignoreCancel,
   makeCancelable
 } from "../../util/CancelablePromise";
-import QueryTable from './QueryTable';
+import QueryTable from "./QueryTable";
 
 export interface QueryLogState {
   history: ApiQuery[];
@@ -66,7 +66,6 @@ class QueryLog extends Component<WithTranslation, QueryLogState> {
 
   constructor(props: WithTranslation) {
     super(props);
-    console.log("Constructor!");
 
     const { t } = this.props;
 
@@ -81,7 +80,7 @@ class QueryLog extends Component<WithTranslation, QueryLogState> {
   }
 
   componentDidMount() {
-    this.fetchQueries({page: 1, pageSize: 25});
+    this.fetchQueries({ page: 1, pageSize: 25 });
   }
 
   componentWillUnmount() {
@@ -177,7 +176,6 @@ class QueryLog extends Component<WithTranslation, QueryLogState> {
    * @param pageSize The number of queries in the page
    */
   fetchQueries = ({ page, pageSize }: { page: number; pageSize: number }) => {
-    console.log('fetchQueries called', this.state.filters);
     // Don't fetch the queries if:
     // - We've reached the end of the queries
     // - We are still waiting for the last fetch to finish
@@ -194,7 +192,6 @@ class QueryLog extends Component<WithTranslation, QueryLogState> {
     // We have to ask the API for more queries
     this.setState({ loading: true });
 
-    console.log("result of parseFilters", this.parseFilters(this.state.filters));
     // Send a request for more queries
     this.updateHandler = makeCancelable(
       api.getHistory({
@@ -214,22 +211,17 @@ class QueryLog extends Component<WithTranslation, QueryLogState> {
           filtersChanged: false
         }));
       })
-      .catch((e) => {
-        console.log('AAA', e);
+      .catch(e => {
         ignoreCancel(e);
       });
   };
-
 
   render() {
     const { t } = this.props;
 
     return (
-      <QueryTable
-        data={this.state.history}
-        columns={columns(t)}
-      />
-/*
+      <QueryTable data={this.state.history} columns={columns(t)} />
+      /*
         className="-striped bg-white mb-4"
         style={{ lineHeight: 1 }}
         showPaginationTop={true}
@@ -354,13 +346,7 @@ const selectionFilter = (
   t: TFunction,
   extras: Array<{ name: string; value: any }> = []
 ) => {
-  return ({
-    filter,
-    onChange
-  }: {
-    filter: any;
-    onChange: any;
-  }) => (
+  return ({ filter, onChange }: { filter: any; onChange: any }) => (
     <select
       onChange={event => onChange(event.target.value)}
       style={{ width: "100%" }}
@@ -381,17 +367,16 @@ const selectionFilter = (
   );
 };
 
-  const getCellTextColor = (cell: any) => {
-    // Check if the row is known to be blocked or allowed (not unknown)
-    if (cell.row.values.status !== 0) {
-      // Blocked queries are red, allowed queries are green
-      return [1, 4, 5, 6].includes(cell.row.values.status) ? "red" : "green"
-    } else {
-      // Unknown queries do not get colored
-      return "";
-    }
-  };
-
+const getCellTextColor = (cell: any) => {
+  // Check if the row is known to be blocked or allowed (not unknown)
+  if (cell.row.values.status !== 0) {
+    // Blocked queries are red, allowed queries are green
+    return [1, 4, 5, 6].includes(cell.row.values.status) ? "red" : "green";
+  } else {
+    // Unknown queries do not get colored
+    return "";
+  }
+};
 
 /**
  * The columns of the Query Log. Some pieces are translated, so you must pass in
@@ -423,13 +408,7 @@ const columns = (t: TFunction) => [
     },
     filterable: true,
     filterMethod: () => true, // Don't filter client side
-    Filter: ({
-      filter,
-      onChange
-    }: {
-      filter: any;
-      onChange: any;
-    }) => (
+    Filter: ({ filter, onChange }: { filter: any; onChange: any }) => (
       <TranslatedTimeRangeSelector
         range={filter ? filter.value : null}
         onSelect={range => {
@@ -452,11 +431,7 @@ const columns = (t: TFunction) => [
     filterMethod: () => true, // Don't filter client side
     Filter: selectionFilter(queryTypes, t),
     Cell: (row: any) => {
-      return (
-        <div style={{ color: getCellTextColor(row) }}>
-          {row.value}
-        </div>
-      );
+      return <div style={{ color: getCellTextColor(row) }}>{row.value}</div>;
     }
   },
   {
@@ -468,11 +443,7 @@ const columns = (t: TFunction) => [
     filterable: true,
     filterMethod: () => true, // Don't filter client side
     Cell: (row: any) => {
-      return (
-        <div style={{ color: getCellTextColor(row) }}>
-          {row.value}
-        </div>
-      );
+      return <div style={{ color: getCellTextColor(row) }}>{row.value}</div>;
     }
   },
   {
@@ -482,13 +453,9 @@ const columns = (t: TFunction) => [
     minWidth: 120,
     className: "horizontal-scroll",
     filterable: true,
-    filterMethod: () => true,// Don't filter client side
+    filterMethod: () => true, // Don't filter client side
     Cell: (row: any) => {
-      return (
-        <div style={{ color: getCellTextColor(row) }}>
-          {row.value}
-        </div>
-      );
+      return <div style={{ color: getCellTextColor(row) }}>{row.value}</div>;
     }
   },
   {
