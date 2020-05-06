@@ -48,6 +48,7 @@ export default function QueryTable({ columns, data }: any) {
     {
       columns,
       data,
+
       initialState: { pageIndex: 0, pageSize: 10 }
     },
     usePagination,
@@ -61,26 +62,15 @@ export default function QueryTable({ columns, data }: any) {
   return (
     <>
       <div className="pagination">
-        <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-          {"<<"}
-        </button>{" "}
-        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-          {"<"}
-        </button>{" "}
-        <button onClick={() => nextPage()} disabled={!canNextPage}>
-          {">"}
-        </button>{" "}
-        <button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-          {">>"}
-        </button>{" "}
-        <span>
-          Page{" "}
-          <strong>
-            {pageIndex + 1} of {pageOptions.length}
-          </strong>{" "}
-        </span>
-        <span>
-          | Go to page:{" "}
+        <button
+          style={{ padding: 5, margin: 10, width: 200 }}
+          onClick={() => previousPage()}
+          disabled={!canPreviousPage}
+        >
+          Previous
+        </button>
+
+        <span style={{ padding: 5, margin: 10 }}>
           <input
             type="number"
             defaultValue={pageIndex + 1}
@@ -88,22 +78,34 @@ export default function QueryTable({ columns, data }: any) {
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
               gotoPage(page);
             }}
-            style={{ width: "100px" }}
+            style={{ width: "70px", textAlign: "center", marginRight: "6px" }}
           />
-        </span>{" "}
+          of {pageOptions.length}
+        </span>
+
+        <button
+          style={{ padding: 5, margin: 10, width: 200 }}
+          onClick={() => nextPage()}
+          disabled={!canNextPage}
+        >
+          Next
+        </button>
+
         <select
+          style={{ maxHeight: 25, marginTop: 15 }}
           value={pageSize}
           onChange={e => {
             setPageSize(Number(e.target.value));
           }}
         >
-          {[10, 20, 30, 40, 50].map(pageSize => (
+          {[10, 25, 50, 100].map(pageSize => (
             <option key={pageSize} value={pageSize}>
               Show {pageSize}
             </option>
           ))}
         </select>
       </div>
+
       <table
         {...getTableProps()}
         className="table table-striped bg-white mb-4"
