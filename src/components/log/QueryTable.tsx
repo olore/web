@@ -1,5 +1,5 @@
-import React, { CSSProperties } from 'react';
-import { useTable, usePagination, UsePaginationOptions, UseSortByOptions, IdType, useRowState, Hooks, UseTableHooks, UseRowStateOptions } from 'react-table';
+import React from 'react';
+import { useTable, usePagination, HeaderGroup, UsePaginationOptions, UseSortByOptions, useRowState, Row } from 'react-table';
 
 // export interface TableInstance<D extends object = {}>
 //     extends UseFiltersInstanceProps<D>,
@@ -18,7 +18,6 @@ export interface TableOptions<D extends object>
 
 export default function QueryTable({ columns, data}: any) {
 
-  // Use the state and functions returned from useTable to build your UI
   const {
     getTableProps,
     getTableBodyProps,
@@ -33,11 +32,22 @@ export default function QueryTable({ columns, data}: any) {
     nextPage,
     previousPage,
     setPageSize,
-    getCellProps,
     state: { pageIndex, pageSize },
-    // initialRowStateAccessor: () => ({ count: 0 }),
-    // initialCellStateAccessor: () => ({ count: 0 }),
-
+  } : {
+    getTableProps: any,
+    getTableBodyProps: any,
+    headerGroups: Array<HeaderGroup>,
+    prepareRow: any,
+    page: Array<Row>,
+    canPreviousPage: any,
+    canNextPage: any,
+    pageOptions: any,
+    pageCount: any,
+    gotoPage: any,
+    nextPage: any,
+    previousPage: any,
+    setPageSize: any,
+    state: any
   } = useTable({
       columns,
       data,
@@ -45,61 +55,8 @@ export default function QueryTable({ columns, data}: any) {
     }, 
     usePagination,
     useRowState,
-    hooks => {
-      hooks.getCellProps.push((props, {instance}) => {
-        console.log(instance);
-        // let status = instance.row.values.status;
-        // let color = [1, 4, 5, 6].includes(status) ? "red" : "green"
-        return [
-
-          props,
-          {
-            style: {
-              color: "pink" // this is able to change colors
-            }
-          }
-
-        ]
-      });
-
-      // hooks.prepareRow.push((row, { instance }) => {
-      //   let color = [1, 4, 5, 6].includes(row.values.status) ? "red" : "green"
-      //   // row.getRowProps().style = ("color: " + color) as CSSProperties;
-
-      //   row.cells.forEach(cell => {
-      //     console.log(cell);
-      //     cell.getCellProps((props, { instance }) => [
-      //       props,
-      //       {
-      //         style: {
-      //           color: color
-      //         }
-      //       }
-      //     ]);
-      //   });
-
-      // })
-    }
   )
 
-  /*
-  const getRowStyles = (props, { instance }) => [
-  props,
-  {
-    style: {
-      display: 'flex',
-      width: `${instance.totalColumnsWidth}px`,
-    },
-  },
-]
-
-export const useBlockLayout = hooks => {
-  hooks.getRowProps.push(getRowStyles)
-  */
-  
-  
-
-  // Render the UI for your table
   return (
     <>
     <div className="pagination">
@@ -148,7 +105,7 @@ export const useBlockLayout = hooks => {
       </div>
     <table {...getTableProps()} className="table table-striped" style={{ backgroundColor: "white"}}>
       <thead>
-        {headerGroups.map((headerGroup: { getHeaderGroupProps: () => JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableRowElement> & React.HTMLAttributes<HTMLTableRowElement>; headers: any[]; }) => (
+        {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
               <th {...column.getHeaderProps()}>{column.render('Header')}</th>
@@ -157,7 +114,7 @@ export const useBlockLayout = hooks => {
         ))}
       </thead>
       <tbody {...getTableBodyProps()}>
-        {page.map((row: { getRowProps: () => JSX.IntrinsicAttributes & React.ClassAttributes<HTMLTableRowElement> & React.HTMLAttributes<HTMLTableRowElement>; cells: any[]; }, i: any) => {
+        {page.map(row => {
           prepareRow(row)
           return (
             <tr {...row.getRowProps()}>
