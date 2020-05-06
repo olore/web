@@ -381,12 +381,11 @@ const selectionFilter = (
   );
 };
 
-  const getCellTextColor = (row: any) => {
+  const getCellTextColor = (cell: any) => {
     // Check if the row is known to be blocked or allowed (not unknown)
-    if (row.status !== 0) {
+    if (cell.row.values.status !== 0) {
       // Blocked queries are red, allowed queries are green
-      console.log(row.row.values.status, row);
-      return [1, 4, 5, 6].includes(row.row.values.status) ? "red" : "green"
+      return [1, 4, 5, 6].includes(cell.row.values.status) ? "red" : "green"
     } else {
       // Unknown queries do not get colored
       return "";
@@ -545,14 +544,14 @@ const columns = (t: TFunction) => [
     Header: t("Action"),
     width: 100,
     filterable: false,
-    Cell: (data: { row: any }) => {
+    Cell: (data: any) => {
       // Blocked, but can whitelist
-      if ([1, 4, 5].includes(data.row.status)) {
+      if ([1, 4, 5].includes(data.cell.row.values.status)) {
         return (
           <button
             type="button"
             className="btn btn-success btn-block"
-            onClick={() => api.addExactWhitelist(data.row.domain)}
+            onClick={() => api.addExactWhitelist(data.cell.row.values.domain)}
           >
             {t("Whitelist")}
           </button>
@@ -561,12 +560,12 @@ const columns = (t: TFunction) => [
 
       // Not explicitly blocked (or is whitelisted), but could be blocked.
       // This includes externally blocked.
-      if ([2, 3, 6].includes(data.row.status)) {
+      if ([2, 3, 6].includes(data.cell.row.values.status)) {
         return (
           <button
             type="button"
             className="btn btn-danger btn-block"
-            onClick={() => api.addExactBlacklist(data.row.domain)}
+            onClick={() => api.addExactBlacklist(data.cell.row.values.domain)}
           >
             {t("Blacklist")}
           </button>

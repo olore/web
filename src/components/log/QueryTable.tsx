@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTable, usePagination, HeaderGroup, UsePaginationOptions, UseSortByOptions, useRowState, Row } from 'react-table';
+import { useTable, usePagination, HeaderGroup, UsePaginationOptions, UseSortByOptions, useRowState, Row, UseTableColumnOptions } from 'react-table';
 
 // export interface TableInstance<D extends object = {}>
 //     extends UseFiltersInstanceProps<D>,
@@ -10,6 +10,7 @@ import { useTable, usePagination, HeaderGroup, UsePaginationOptions, UseSortByOp
 
 export interface TableOptions<D extends object>
   extends UsePaginationOptions<D>,
+    UseTableColumnOptions<D>,
     UseSortByOptions<D> {};
 
 // export interface TableState<D extends object = {}> {
@@ -108,7 +109,7 @@ export default function QueryTable({ columns, data}: any) {
         {headerGroups.map(headerGroup => (
           <tr {...headerGroup.getHeaderGroupProps()}>
             {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+              <th {...column.getHeaderProps()} style={{ width: column.width}}>{column.render('Header')}</th>
             ))}
           </tr>
         ))}
@@ -119,7 +120,7 @@ export default function QueryTable({ columns, data}: any) {
           return (
             <tr {...row.getRowProps()}>
               {row.cells.map(cell => {
-                return <td {...cell.getCellProps()} style={{padding: '7px 5px'}}>{cell.render('Cell')}</td>
+                return <td {...cell.getCellProps()} style={{lineHeight: 1, padding: '7px 5px'}}>{cell.render('Cell')}</td>
               })}
             </tr>
           )
