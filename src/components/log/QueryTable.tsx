@@ -23,15 +23,15 @@ export default function QueryTable({ columns, data }: any) {
       overflow: "auto",
       textOverflow: "clip",
       wordBreak: "normal",
-      whiteSpace: "nowrap",
+      whiteSpace: "nowrap"
     };
     if (cell.column.id === "status") {
       defaultOverflow = {
         overflow: "auto",
         textOverflow: "wrap",
         wordBreak: "break-word",
-        whiteSpace: "wrap",
-      }
+        whiteSpace: "wrap"
+      };
     }
     console.log(cell);
     return [
@@ -126,7 +126,12 @@ export default function QueryTable({ columns, data }: any) {
       <table
         {...getTableProps()}
         className="table table-striped bg-white mb-4"
-        style={{ width: "100%", lineHeight: 1.3, tableLayout: "fixed", backgroundColor: "white" }}
+        style={{
+          width: "100%",
+          lineHeight: 1.3,
+          tableLayout: "fixed",
+          backgroundColor: "white"
+        }}
       >
         <thead>
           {headerGroups.map(headerGroup => (
@@ -135,7 +140,11 @@ export default function QueryTable({ columns, data }: any) {
                 <th {...column.getHeaderProps(column.getSortByToggleProps())}>
                   {column.render("Header")}
                   <span>
-                    {column.isSorted ? (column.isSortedDesc ? '🔽' : '🔼') : ' '}
+                    {column.isSorted
+                      ? column.isSortedDesc
+                        ? "🔽"
+                        : "🔼"
+                      : " "}
                   </span>
                 </th>
               ))}

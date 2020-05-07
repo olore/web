@@ -385,7 +385,7 @@ const columns = (t: TFunction) => [
     id: "time",
     accessor: (r: ApiQuery) => r.timestamp,
     width: 8,
-    sortType: 'basic',
+    sortType: "basic",
     Cell: (row: any) => {
       const date = new Date(row.value * 1000);
       const month = date.toLocaleDateString(i18n.language, {
@@ -425,7 +425,7 @@ const columns = (t: TFunction) => [
     id: "queryType",
     accessor: (r: ApiQuery) => queryTypes[r.type],
     width: 5,
-    sortType: 'basic',
+    sortType: "basic",
     filterable: true,
     filterMethod: () => true, // Don't filter client side
     Filter: selectionFilter(queryTypes, t),
@@ -438,7 +438,7 @@ const columns = (t: TFunction) => [
     id: "domain",
     accessor: (r: ApiQuery) => r.domain,
     width: 20,
-    sortType: 'basic',
+    sortType: "basic",
     className: "horizontal-scroll",
     filterable: true,
     filterMethod: () => true, // Don't filter client side
@@ -451,7 +451,7 @@ const columns = (t: TFunction) => [
     id: "client",
     accessor: (r: ApiQuery) => r.client,
     width: 25,
-    sortType: 'basic',
+    sortType: "basic",
     className: "horizontal-scroll",
     filterMethod: () => true, // Don't filter client side
     Cell: (row: any) => {
@@ -463,7 +463,7 @@ const columns = (t: TFunction) => [
     id: "status",
     accessor: (r: ApiQuery) => r.status,
     width: 14,
-    sortType: 'basic',
+    sortType: "basic",
     filterable: true,
     filterMethod: () => true, // Don't filter client side
     Filter: selectionFilter(status(t), t, [
@@ -483,7 +483,7 @@ const columns = (t: TFunction) => [
     id: "dnssec",
     accessor: (r: ApiQuery) => r.dnssec,
     width: 8,
-    sortType: 'basic',
+    sortType: "basic",
     Cell: (row: any) => (
       <div style={{ color: dnssecColor[row.value] }}>
         {dnssec(t)[row.value]}
@@ -498,7 +498,7 @@ const columns = (t: TFunction) => [
     id: "reply",
     accessor: (r: ApiQuery) => ({ type: r.reply, time: r.response_time }),
     width: 10,
-    sortType: 'basic',
+    sortType: "basic",
     Cell: (row: any) => (
       <div style={{ color: "black" }}>
         {replyTypes(t)[row.value.type]}
@@ -513,7 +513,7 @@ const columns = (t: TFunction) => [
   {
     Header: t("Action"),
     width: 10,
-    sortType: 'basic',
+    sortType: "basic",
     filterable: false,
     Cell: (data: any) => {
       // Blocked, but can whitelist
