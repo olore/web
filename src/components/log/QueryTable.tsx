@@ -1,5 +1,5 @@
 import React from "react";
-import { useTable, usePagination, useRowState } from "react-table";
+import { useTable, usePagination, useRowState, useSortBy } from "react-table";
 
 export default function QueryTable({ columns, data }: any) {
   const border = { border: "1px solid rgba(0,0,0,.02)" };
@@ -9,8 +9,9 @@ export default function QueryTable({ columns, data }: any) {
       props,
       {
         style: {
-          width: `${column.width}px`,
+          width: `${column.width}%`,
           textAlign: "center",
+          fontSize: "0.75rem",
           ...border
         }
       }
@@ -18,11 +19,28 @@ export default function QueryTable({ columns, data }: any) {
   };
 
   const getCellProps = (props: any, { cell }: any) => {
+    let defaultOverflow = {
+      overflow: "auto",
+      textOverflow: "clip",
+      wordBreak: "normal",
+      whiteSpace: "nowrap",
+    };
+    if (cell.column.id === "status") {
+      defaultOverflow = {
+        overflow: "auto",
+        textOverflow: "wrap",
+        wordBreak: "break-word",
+        whiteSpace: "wrap",
+      }
+    }
+    console.log(cell);
     return [
       props,
       {
         style: {
           padding: "7px 5px",
+          verticalAlign: "inherit",
+          ...defaultOverflow,
           ...border
         }
       }
@@ -38,7 +56,6 @@ export default function QueryTable({ columns, data }: any) {
     canPreviousPage,
     canNextPage,
     pageOptions,
-    pageCount,
     gotoPage,
     nextPage,
     previousPage,
@@ -48,11 +65,11 @@ export default function QueryTable({ columns, data }: any) {
     {
       columns,
       data,
-
       initialState: { pageIndex: 0, pageSize: 10 }
     },
-    usePagination,
     useRowState,
+    useSortBy,
+    usePagination,
     hooks => {
       hooks.getHeaderProps.push(getHeaderProps);
       hooks.getCellProps.push(getCellProps);
@@ -109,18 +126,23 @@ export default function QueryTable({ columns, data }: any) {
       <table
         {...getTableProps()}
         className="table table-striped bg-white mb-4"
-        style={{ lineHeight: 1, backgroundColor: "white" }}
+        style={{ width: "100%", lineHeight: 1.3, tableLayout: "fixed", backgroundColor: "white" }}
       >
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>{column.render("Header")}</th>
+                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                  {column.render("Header")}
+                  <span>
+                    {column.isSorted ? (column.isSortedDesc ? '🔽' : '🔼') : ' '}
+                  </span>
+                </th>
               ))}
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()}>
+        <tbody {...getTableBodyProps()} style={{ verticalAlign: "middle" }}>
           {page.map(row => {
             prepareRow(row);
             return (

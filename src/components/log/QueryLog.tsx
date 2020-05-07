@@ -378,12 +378,14 @@ const getCellTextColor = (cell: any) => {
  * The columns of the Query Log. Some pieces are translated, so you must pass in
  * the translation function before using the columns.
  */
+
 const columns = (t: TFunction) => [
   {
     Header: t("Time"),
     id: "time",
     accessor: (r: ApiQuery) => r.timestamp,
-    width: 70,
+    width: 8,
+    sortType: 'basic',
     Cell: (row: any) => {
       const date = new Date(row.value * 1000);
       const month = date.toLocaleDateString(i18n.language, {
@@ -422,7 +424,8 @@ const columns = (t: TFunction) => [
     Header: t("Type"),
     id: "queryType",
     accessor: (r: ApiQuery) => queryTypes[r.type],
-    width: 50,
+    width: 5,
+    sortType: 'basic',
     filterable: true,
     filterMethod: () => true, // Don't filter client side
     Filter: selectionFilter(queryTypes, t),
@@ -434,7 +437,8 @@ const columns = (t: TFunction) => [
     Header: t("Domain"),
     id: "domain",
     accessor: (r: ApiQuery) => r.domain,
-    minWidth: 150,
+    width: 20,
+    sortType: 'basic',
     className: "horizontal-scroll",
     filterable: true,
     filterMethod: () => true, // Don't filter client side
@@ -446,9 +450,9 @@ const columns = (t: TFunction) => [
     Header: t("Client"),
     id: "client",
     accessor: (r: ApiQuery) => r.client,
-    minWidth: 120,
+    width: 25,
+    sortType: 'basic',
     className: "horizontal-scroll",
-    filterable: true,
     filterMethod: () => true, // Don't filter client side
     Cell: (row: any) => {
       return <div style={{ color: getCellTextColor(row) }}>{row.value}</div>;
@@ -458,7 +462,8 @@ const columns = (t: TFunction) => [
     Header: t("Status"),
     id: "status",
     accessor: (r: ApiQuery) => r.status,
-    width: 140,
+    width: 14,
+    sortType: 'basic',
     filterable: true,
     filterMethod: () => true, // Don't filter client side
     Filter: selectionFilter(status(t), t, [
@@ -477,7 +482,8 @@ const columns = (t: TFunction) => [
     Header: "DNSSEC",
     id: "dnssec",
     accessor: (r: ApiQuery) => r.dnssec,
-    width: 90,
+    width: 8,
+    sortType: 'basic',
     Cell: (row: any) => (
       <div style={{ color: dnssecColor[row.value] }}>
         {dnssec(t)[row.value]}
@@ -491,7 +497,8 @@ const columns = (t: TFunction) => [
     Header: t("Reply"),
     id: "reply",
     accessor: (r: ApiQuery) => ({ type: r.reply, time: r.response_time }),
-    width: 90,
+    width: 10,
+    sortType: 'basic',
     Cell: (row: any) => (
       <div style={{ color: "black" }}>
         {replyTypes(t)[row.value.type]}
@@ -505,7 +512,8 @@ const columns = (t: TFunction) => [
   },
   {
     Header: t("Action"),
-    width: 100,
+    width: 10,
+    sortType: 'basic',
     filterable: false,
     Cell: (data: any) => {
       // Blocked, but can whitelist
