@@ -437,7 +437,7 @@ const columns = (t: TFunction) => [
     Header: t("Domain"),
     id: "domain",
     accessor: (r: ApiQuery) => r.domain,
-    width: 20,
+    width: 30,
     sortType: "basic",
     className: "horizontal-scroll",
     filterable: true,
@@ -450,7 +450,7 @@ const columns = (t: TFunction) => [
     Header: t("Client"),
     id: "client",
     accessor: (r: ApiQuery) => r.client,
-    width: 25,
+    width: 15,
     sortType: "basic",
     className: "horizontal-scroll",
     filterMethod: () => true, // Don't filter client side
@@ -472,11 +472,19 @@ const columns = (t: TFunction) => [
     ]),
     Cell: (row: any) => {
       return (
-        <div style={{ color: getCellTextColor(row) }}>
+        <div
+          style={{
+            color: getCellTextColor(row),
+            overflow: "auto",
+            textOverflow: "wrap",
+            wordBreak: "break-word"
+          }}
+        >
           {status(t)[row.value]}
         </div>
       );
-    }
+    },
+    wrapOverflow: true
   },
   {
     Header: "DNSSEC",

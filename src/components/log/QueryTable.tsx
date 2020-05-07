@@ -4,49 +4,6 @@ import { useTable, usePagination, useRowState, useSortBy } from "react-table";
 export default function QueryTable({ columns, data }: any) {
   const border = { border: "1px solid rgba(0,0,0,.02)" };
 
-  const getHeaderProps = (props: any, { column }: any) => {
-    return [
-      props,
-      {
-        style: {
-          width: `${column.width}%`,
-          textAlign: "center",
-          fontSize: "0.75rem",
-          ...border
-        }
-      }
-    ];
-  };
-
-  const getCellProps = (props: any, { cell }: any) => {
-    let defaultOverflow = {
-      overflow: "auto",
-      textOverflow: "clip",
-      wordBreak: "normal",
-      whiteSpace: "nowrap"
-    };
-    if (cell.column.id === "status") {
-      defaultOverflow = {
-        overflow: "auto",
-        textOverflow: "wrap",
-        wordBreak: "break-word",
-        whiteSpace: "wrap"
-      };
-    }
-    console.log(cell);
-    return [
-      props,
-      {
-        style: {
-          padding: "7px 5px",
-          verticalAlign: "inherit",
-          ...defaultOverflow,
-          ...border
-        }
-      }
-    ];
-  };
-
   const {
     getTableProps,
     getTableBodyProps,
@@ -69,11 +26,7 @@ export default function QueryTable({ columns, data }: any) {
     },
     useRowState,
     useSortBy,
-    usePagination,
-    hooks => {
-      hooks.getHeaderProps.push(getHeaderProps);
-      hooks.getCellProps.push(getCellProps);
-    }
+    usePagination
   );
 
   return (
@@ -129,15 +82,22 @@ export default function QueryTable({ columns, data }: any) {
         style={{
           width: "100%",
           lineHeight: 1.3,
-          tableLayout: "fixed",
-          backgroundColor: "white"
+          tableLayout: "fixed"
         }}
       >
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps(column.getSortByToggleProps())}>
+                <th
+                  {...column.getHeaderProps(column.getSortByToggleProps())}
+                  style={{
+                    ...border,
+                    fontSize: "0.75rem",
+                    textAlign: "center",
+                    width: `${column.width}%`
+                  }}
+                >
                   {column.render("Header")}
                   <span>
                     {column.isSorted
@@ -158,7 +118,18 @@ export default function QueryTable({ columns, data }: any) {
               <tr {...row.getRowProps()}>
                 {row.cells.map(cell => {
                   return (
-                    <td {...cell.getCellProps()}>{cell.render("Cell")}</td>
+                    <td
+                      {...cell.getCellProps()}
+                      style={{
+                        ...border,
+                        overflow: "auto",
+                        padding: "7px 5px",
+                        textOverflow: "clip",
+                        verticalAlign: "inherit"
+                      }}
+                    >
+                      {cell.render("Cell")}
+                    </td>
                   );
                 })}
               </tr>
