@@ -345,7 +345,7 @@ const selectionFilter = (
   return ({ filter, onChange }: { filter: any; onChange: any }) => (
     <select
       onChange={event => onChange(event.target.value)}
-      style={{ width: "100%" }}
+      className="w-100"
       value={filter ? filter.value : "all"}
     >
       <option value="all">{t("All")}</option>
@@ -437,13 +437,13 @@ const columns = (t: TFunction) => [
     Header: t("Domain"),
     id: "domain",
     accessor: (r: ApiQuery) => r.domain,
-    width: 30,
+    width: 25,
     sortType: "basic",
     className: "horizontal-scroll",
     filterable: true,
     filterMethod: () => true, // Don't filter client side
     Cell: (row: any) => {
-      return <div style={{ color: getCellTextColor(row) }}>{row.value}</div>;
+      return <div style={{ color: getCellTextColor(row), wordBreak: "break-all" }}>{row.value}</div>;
     }
   },
   {
@@ -483,14 +483,13 @@ const columns = (t: TFunction) => [
           {status(t)[row.value]}
         </div>
       );
-    },
-    wrapOverflow: true
+    }
   },
   {
     Header: "DNSSEC",
     id: "dnssec",
     accessor: (r: ApiQuery) => r.dnssec,
-    width: 8,
+    width: 10,
     sortType: "basic",
     Cell: (row: any) => (
       <div style={{ color: dnssecColor[row.value] }}>
@@ -520,7 +519,7 @@ const columns = (t: TFunction) => [
   },
   {
     Header: t("Action"),
-    width: 10,
+    width: 13,
     sortType: "basic",
     filterable: false,
     Cell: (data: any) => {

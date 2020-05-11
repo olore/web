@@ -33,28 +33,32 @@ export default function QueryTable({ columns, data }: any) {
     <>
       <div className="pagination">
         <button
-          style={{ padding: 5, margin: 10, width: 200 }}
+          style={{ width: 200 }}
+          className="p-2 m-3"
           onClick={() => previousPage()}
           disabled={!canPreviousPage}
         >
           Previous
         </button>
 
-        <span style={{ padding: 5, margin: 10 }}>
+        <span
+          className="p-2 m-3">
           <input
             type="number"
             defaultValue={pageIndex + 1}
+            className="text-center mr-1"
             onChange={e => {
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
               gotoPage(page);
             }}
-            style={{ width: "70px", textAlign: "center", marginRight: "6px" }}
+            style={{ width: "70px" }}
           />
           of {pageOptions.length}
         </span>
 
         <button
-          style={{ padding: 5, margin: 10, width: 200 }}
+          style={{ width: 200 }}
+          className="p-2 m-3"
           onClick={() => nextPage()}
           disabled={!canNextPage}
         >
@@ -78,9 +82,8 @@ export default function QueryTable({ columns, data }: any) {
 
       <table
         {...getTableProps()}
-        className="table table-striped bg-white mb-4"
+        className="table table-striped bg-white mb-4 w-100"
         style={{
-          width: "100%",
           lineHeight: 1.3,
           tableLayout: "fixed"
         }}
@@ -91,10 +94,9 @@ export default function QueryTable({ columns, data }: any) {
               {headerGroup.headers.map(column => (
                 <th
                   {...column.getHeaderProps(column.getSortByToggleProps())}
+                  className="align-middle text-center px-2 py-1"
                   style={{
                     ...border,
-                    fontSize: "0.75rem",
-                    textAlign: "center",
                     width: `${column.width}%`
                   }}
                 >
@@ -111,7 +113,7 @@ export default function QueryTable({ columns, data }: any) {
             </tr>
           ))}
         </thead>
-        <tbody {...getTableBodyProps()} style={{ verticalAlign: "middle" }}>
+        <tbody {...getTableBodyProps()} >
           {page.map(row => {
             prepareRow(row);
             return (
@@ -120,12 +122,10 @@ export default function QueryTable({ columns, data }: any) {
                   return (
                     <td
                       {...cell.getCellProps()}
+                      className="align-middle px-2 py-2"
                       style={{
                         ...border,
                         overflow: "auto",
-                        padding: "7px 5px",
-                        textOverflow: "clip",
-                        verticalAlign: "inherit"
                       }}
                     >
                       {cell.render("Cell")}
