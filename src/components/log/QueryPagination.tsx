@@ -1,6 +1,7 @@
 import React from "react";
 
-export default function QueryPagination({ data }: any) {
+export default function QueryPagination({ t, data }: any) {
+
   let {
     previousPage,
     canPreviousPage,
@@ -13,6 +14,7 @@ export default function QueryPagination({ data }: any) {
     setPageSize
   } = data;
 
+
   return (
     <div
       className="pagination w-100 d-flex flex-row p-1 bg-white"
@@ -23,7 +25,7 @@ export default function QueryPagination({ data }: any) {
         disabled={!canPreviousPage}
         style={{ flex: "1 1" }}
       >
-        Previous
+        {t("Previous")}
       </button>
 
       <div
@@ -35,7 +37,7 @@ export default function QueryPagination({ data }: any) {
         }}
       >
         <span className="py-1 px-3">
-          <span className="px-1">Page</span>
+          <span className="px-1">{t("Page")}</span>
           <input
             type="number"
             value={pageIndex + 1}
@@ -46,7 +48,7 @@ export default function QueryPagination({ data }: any) {
               gotoPage(page);
             }}
           />
-          of {pageOptions.length}
+          {t("of")} {pageOptions.length}
         </span>
 
         <select
@@ -59,7 +61,7 @@ export default function QueryPagination({ data }: any) {
         >
           {[10, 25, 50, 100].map(pageSize => (
             <option key={pageSize} value={pageSize}>
-              Show {pageSize}
+              {t("Show")} {pageSize}
             </option>
           ))}
         </select>
@@ -70,7 +72,7 @@ export default function QueryPagination({ data }: any) {
         disabled={!canNextPage}
         style={{ flex: "1 1" }}
       >
-        Next
+        {t("Next")}
       </button>
     </div>
   );

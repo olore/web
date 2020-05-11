@@ -218,7 +218,7 @@ class QueryLog extends Component<WithTranslation, QueryLogState> {
     const { t } = this.props;
 
     return (
-      <QueryTable data={this.state.history} columns={columns(t)} />
+      <QueryTable t={t} data={this.state.history} columns={columns(t)} />
       /*
         showPaginationTop={true}
         sortable={false}

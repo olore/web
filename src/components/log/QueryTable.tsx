@@ -2,7 +2,7 @@ import React from "react";
 import { useTable, usePagination, useRowState, useSortBy } from "react-table";
 import QueryPagination from "./QueryPagination";
 
-export default function QueryTable({ columns, data }: any) {
+export default function QueryTable({ t, columns, data }: any) {
   const border = { border: "1px solid rgba(0,0,0,.02)" };
 
   const {
@@ -33,6 +33,7 @@ export default function QueryTable({ columns, data }: any) {
   return (
     <>
       <QueryPagination
+        t={t}
         data={{
           canPreviousPage,
           canNextPage,
