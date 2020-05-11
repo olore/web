@@ -1,7 +1,6 @@
 import React from "react";
 
 export default function QueryPagination({ t, data }: any) {
-
   let {
     previousPage,
     canPreviousPage,
@@ -13,7 +12,6 @@ export default function QueryPagination({ t, data }: any) {
     pageSize,
     setPageSize
   } = data;
-
 
   return (
     <div
