@@ -443,7 +443,11 @@ const columns = (t: TFunction) => [
     filterable: true,
     filterMethod: () => true, // Don't filter client side
     Cell: (row: any) => {
-      return <div style={{ color: getCellTextColor(row), wordBreak: "break-all" }}>{row.value}</div>;
+      return (
+        <div style={{ color: getCellTextColor(row), wordBreak: "break-all" }}>
+          {row.value}
+        </div>
+      );
     }
   },
   {
