@@ -32,15 +32,15 @@ export function setupI18n(ajax?: any) {
       defaultNS: "common",
       fallbackNS: [
         "dashboard",
+        "time-ranges",
         "footer",
-        "lists",
         "location",
+        "lists",
         "login",
         "query-log",
         "settings",
         "api-errors",
-        "preferences",
-        "time-ranges"
+        "preferences"
       ],
       nsSeparator: false,
       keySeparator: false,
