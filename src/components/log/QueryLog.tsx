@@ -216,59 +216,7 @@ class QueryLog extends Component<WithTranslation, QueryLogState> {
 
   render() {
     const { t } = this.props;
-
-    return (
-      <QueryTable t={t} data={this.state.history} columns={columns(t)} />
-      /*
-        showPaginationTop={true}
-        sortable={false}
-        filterable={false}
-        loading={this.state.loading}
-        onFetchData={state => {
-          if (isEqual(state.filtered, this.state.filters)) {
-            // If the filters have not changed, do not debounce the fetch.
-            // This allows fetching the next page to happen without waiting for
-            // the debounce.
-            this.fetchQueries(state);
-          } else {
-            // The filters have changed, so debounce until they have stabilized
-            // (wait for the user to stop typing)
-            return debounce(this.fetchQueries, 350)(state);
-          }
-        }}
-        onFilteredChange={debounce(filters => {
-          if (isEqual(filters, this.state.filters)) {
-            return;
-          }
-
-          this.setState({
-            filters,
-            filtersChanged: true,
-            cursor: null,
-            atEnd: false,
-            loading: false,
-            history: []
-          });
-        }, 300)}
-        defaultFiltered={[
-          {
-            id: "time",
-            value: getDefaultRange(t)
-          }
-        ]}
-        getTrProps={this.getRowProps}
-        ofText={this.state.atEnd ? "of" : "of at least"}
-        // Pad empty rows to have the same height as filled rows
-        PadRowComponent={() => (
-          <span>
-            &nbsp;
-            <br />
-            &nbsp;
-          </span>
-        )}
-      />
-*/
-    );
+    return <QueryTable t={t} data={this.state.history} columns={columns(t)} />;
   }
 }
 
@@ -340,7 +288,7 @@ const queryTypes = ["A", "AAAA", "ANY", "SRV", "SOA", "PTR", "TXT"];
 const selectionFilter = (
   items: string[],
   t: TFunction,
-  extras: Array<{ name: string; value: any }> = []
+  extras: { name: string; value: any }[] = []
 ) => {
   return ({ filter, onChange }: { filter: any; onChange: any }) => (
     <select
@@ -368,10 +316,9 @@ const getCellTextColor = (cell: any) => {
   if (cell.row.values.status !== 0) {
     // Blocked queries are red, allowed queries are green
     return [1, 4, 5, 6].includes(cell.row.values.status) ? "red" : "green";
-  } else {
-    // Unknown queries do not get colored
-    return "";
   }
+  // Unknown queries do not get colored
+  return "";
 };
 
 /**
