@@ -18,7 +18,7 @@ React.useLayoutEffect = React.useEffect;
 
 const tick = global.tick;
 
-let historyResponse: ApiHistoryResponse = {
+const historyResponse: ApiHistoryResponse = {
   cursor: null,
   history: [
     {
@@ -66,11 +66,11 @@ describe("shows correct color for first 4 columns based on status value", () => 
       await tick();
       wrapper.update();
 
-      let cells = wrapper.find("tr td div");
+      const cells = wrapper.find("tr td div");
       expect(cells.length).toBeGreaterThan(4);
 
       for (let i = 0; i < 4; i++) {
-        let node = cells.get(i);
+        const node = cells.get(i);
         expect(node.props.style).toHaveProperty("color", expectedColor);
       }
     }

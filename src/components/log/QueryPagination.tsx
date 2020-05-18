@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function QueryPagination({ t, data }: any) {
-  let {
+  const {
     previousPage,
     canPreviousPage,
     pageIndex,
@@ -19,6 +19,7 @@ export default function QueryPagination({ t, data }: any) {
       style={{ alignItems: "stretch", justifyContent: "space-between" }}
     >
       <button
+        type="button"
         onClick={() => previousPage()}
         disabled={!canPreviousPage}
         style={{ flex: "1 1" }}
@@ -66,6 +67,7 @@ export default function QueryPagination({ t, data }: any) {
       </div>
 
       <button
+        type="button"
         onClick={() => nextPage()}
         disabled={!canNextPage}
         style={{ flex: "1 1" }}
